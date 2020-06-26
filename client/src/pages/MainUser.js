@@ -1,19 +1,26 @@
 import React, {Component} from 'react'
-import Sidebar from "./component/Sidebar";
+import SidebarUser from "./component/SidebarUser";
 import Footer from "./component/Footer";
 import {BrowserRouter as Router, Route, Switch,Link} from "react-router-dom";
-import Dashboard from "./pages-dashboard/Dashboard";
-import IndexUser from "./pages-user/IndexUser";
+import DashboardUser from "./pages-dashboard/DashboardUser";
+import IndexLkh from "./pages-lkh/IndexLkh";
 import IndexProfile from "./pages-profile/IndexProfile";
-import IndexDataLkh from "./pages-data-lkh/IndexDataLkh"
-import IndexVerifikasiLkh from "./pages-verifikasi-lkh/IndexVerifikasiLkh";
-import IndexDataDetailLkh from "./pages-data-lkh/IndexDataDetailLkh";
-
+import IndexLkhUser from "./pages-lkh-user/IndexLkhUser"
 import jwt_decode from "jwt-decode";
 import {getUser} from "../components/UserFunctions";
 
-
-class Main extends Component {
+class MainUser extends Component {
+  componentDidMount() {
+    const token = localStorage.usertoken
+    const decoded = jwt_decode(token)
+    getUser(decoded.uid).then(res => {
+      this.setState({
+        first_name: res.data.first_name,
+        last_name: res.data.last_name,
+        email: res.data.email
+      })
+    })
+  }
 
   logOut(e) {
 
@@ -36,7 +43,7 @@ class Main extends Component {
             </ul>
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to="/profile" className="nav-link" data-widget="control-sidebar" data-slide="true"  role="button">
+                <Link to="/profile" className="nav-link" data-widget="control-sidebar" data-slide="true">
                   <i className="fas fa-user"></i>
                 </Link>
               </li>
@@ -47,15 +54,12 @@ class Main extends Component {
               </li>
             </ul>
           </nav>
-          <Sidebar/>
+          <SidebarUser/>
           <Switch>
             <Route path="/profile" component={IndexProfile}/>
-            <Route path="/dashboard-admin" component={Dashboard}/>
-            <Route path="/user" component={IndexUser}/>
-            <Route path="/data-lkh" component={IndexDataLkh}/>
-            <Route path="/verifikasi-lkh" component={IndexVerifikasiLkh}/>
-            <Route path="/data-lkh-detail" component={IndexDataDetailLkh}/>
-
+            <Route path="/dashboard-user" component={DashboardUser}/>
+            <Route path="/lkh" component={IndexLkh}/>
+            <Route path="/lkh-user" component={IndexLkhUser}/>
           </Switch>
           <Footer/>
         </div>
@@ -64,4 +68,4 @@ class Main extends Component {
   }
 }
 
-export default Main
+export default MainUser

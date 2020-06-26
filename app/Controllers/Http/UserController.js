@@ -3,6 +3,7 @@
 const User = use('App/Models/User')
 
 class UserController {
+
   async login({request, response, auth}) {
     const {email, password} = request.only(['email', 'password'])
 
@@ -52,6 +53,24 @@ class UserController {
     })
   }
 
+  async editUser({request, response}) {
+    const id = request.input('id');;
+    const user = await User.find(id);
+    user.first_name = request.input('first_name');
+    user.last_name = request.input('last_name');
+    user.role = request.input('role');
+
+    await user.save();
+
+    return response.send({
+      data:{
+        message: 'Data '+request.input('first_name')+ ' Berhasil di Update!',
+        data:user
+      }
+
+    })
+  }
+
   async show({params, response}) {
     const user = await User.find(params.id)
     const res = {
@@ -65,17 +84,78 @@ class UserController {
 
   async showAll({request, response}) {
     try {
-      let pagination = request.only(['page', 'limit'])
-      const page = parseInt(pagination.page, 10) || 1;
-      const limit = parseInt(pagination.limit, 10) || 10;
-      const user = await User.query()
-        .from('users')
-        .paginate(page, limit)
-      return response.json(user)
+      if(request.input('cari') !== null){
+        let pagination = request.only(['page', 'limit'])
+        const page = parseInt(pagination.page, 10) || 1;
+        const limit = parseInt(pagination.limit, 10) || 10;
+        const user = await User.query()
+          .from('users')
+          .where('first_name', 'like', `%${request.input('cari')}%`)
+          .orWhere('last_name', 'like', `%${request.input('cari')}%`)
+          .orWhere('role', 'like', `%${request.input('cari')}%`)
+          .orWhere('email', 'like', `%${request.input('cari')}%`)
+          .paginate(1,50)
+        return response.json(user)
+      }else{
+        let pagination = request.only(['page', 'limit'])
+        const page = parseInt(pagination.page, 10) || 1;
+        const limit = parseInt(pagination.limit, 10) || 10;
+        const user = await User.query()
+          .from('users')
+          .paginate(request.input('page'),request.input('limit'))
+        return response.json(user)
+      }
+
 
     } catch (error) {
       throw error
     }
+  }
+
+  async showAllLkh({request, response}) {
+    try {
+      if(request.input('cari') !== null){
+        let pagination = request.only(['page', 'limit'])
+        const page = parseInt(pagination.page, 10) || 1;
+        const limit = parseInt(pagination.limit, 10) || 10;
+        const user = await User.query()
+          .from('users')
+          .where('role', 'user')
+          .where('first_name', 'like', `%${request.input('cari')}%`)
+          .orWhere('last_name', 'like', `%${request.input('cari')}%`)
+          .orWhere('role', 'like', `%${request.input('cari')}%`)
+          .orWhere('email', 'like', `%${request.input('cari')}%`)
+          .paginate(1,50)
+        return response.json(user)
+      }else{
+        let pagination = request.only(['page', 'limit'])
+        const page = parseInt(pagination.page, 10) || 1;
+        const limit = parseInt(pagination.limit, 10) || 10;
+        const user = await User.query()
+          .from('users')
+          .where('role', 'user').whereRaw('(EXTRACT(MONTH FROM users.created_at)) = ?)', [1])
+          .fetch()
+          .paginate(request.input('page'),request.input('limit'))
+        return response.json(user)
+      }
+
+
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async hapusUser({request, response}){
+    const id = request.input('id');
+    const user = await User.find(id);
+    await user.delete();
+
+    return response.send({
+      data:{
+        message: 'Data '+request.input('first_name')+ ' Berhasil di Hapus!',
+      }
+
+    })
   }
 }
 

@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
 import Form from './Form'
-import {getAllUser, EditUser, TambahUser, HapusUser} from './ApiUser'
+import {getAllVerifikasiLkh,VerifikasiLkh} from './ApiVerifikasiLkh'
 import {Button, Modal} from 'react-bootstrap';
 import Swal from 'sweetalert2'
-
+import moment from "moment";
+import 'moment/locale/id';
+moment().locale('id')
 const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
@@ -16,7 +18,7 @@ const Toast = Swal.mixin({
   }
 })
 
-class IndexUser extends Component {
+class IndexVerifikasiLkh extends Component {
   constructor() {
     super();
     this.state = {
@@ -24,7 +26,7 @@ class IndexUser extends Component {
       page: 1,
       limit: 10,
       lastPage: '',
-      panjang:0,
+      panjang: 0,
 
       data: [],
       searchData: '',
@@ -37,6 +39,8 @@ class IndexUser extends Component {
       setShow: false,
       post: {
         id: '',
+        status:'',
+        tanggal_pekerjaan:'',
         first_name: '',
         last_name: '',
         email: '',
@@ -52,18 +56,18 @@ class IndexUser extends Component {
   }
 
   getAll = () => {
-    const postData = {
+    const postVerifikasi = {
       token: localStorage.usertoken,
       page: this.state.page,
       limit: this.state.limit,
       searchData: null,
     }
 
-    getAllUser(postData).then(data => {
+    getAllVerifikasiLkh(postVerifikasi).then(data => {
       this.setState({
         data: data.data,
         lastPage: data.lastPage,
-        panjang:data.total,
+        panjang: data.total,
       })
     })
   }
@@ -72,21 +76,21 @@ class IndexUser extends Component {
     this.setState({
       data: [],
     })
-    const postData = {
+    const postVerifikasi = {
       token: localStorage.usertoken,
       page: this.state.page - 1,
       limit: this.state.limit,
       searchData: null,
     }
 
-    getAllUser(postData).then(data => {
+    getAllVerifikasiLkh(postVerifikasi).then(data => {
 
       this.setState({
 
         data: data.data,
         lastPage: data.lastPage,
         page: data.page,
-        panjang:data.total,
+        panjang: data.total,
       })
     })
   }
@@ -95,14 +99,14 @@ class IndexUser extends Component {
     this.setState({
       data: [],
     })
-    const postData = {
+    const postVerifikasi = {
       searchData: null,
       token: localStorage.usertoken,
       page: this.state.page + 1,
       limit: this.state.limit
     }
 
-    getAllUser(postData).then(data => {
+    getAllVerifikasiLkh(postVerifikasi).then(data => {
       this.setState({
         data: data.data,
         lastPage: data.lastPage,
@@ -121,14 +125,14 @@ class IndexUser extends Component {
         data: [],
       });
 
-      const postData = {
+      const postVerifikasi = {
         searchData: cari,
         token: localStorage.usertoken,
         page: this.state.page + 1,
         limit: this.state.limit
       }
 
-      getAllUser(postData).then(data => {
+      getAllVerifikasiLkh(postVerifikasi).then(data => {
         this.setState({
           data: data.data,
           lastPage: data.lastPage,
@@ -160,62 +164,26 @@ class IndexUser extends Component {
     })
 
     if (this.state.tipeForm === 1) {
-      TambahUser(this.state.post).then(res => {
+      VerifikasiLkh(this.state.post).then(res => {
         if (res) {
           Toast.fire({
             icon: 'success',
             title: res.data.message
           })
           console.log(res.data.data)
+          this.state.data.splice(this.state.index, 1);
           this.setState(prevState => ({
             loadingButton: false,
-            data: [...prevState.data, res.data.data],
-            post: {
-              first_name: '',
-              last_name: '',
-              email: '',
-              role: '',
-              password: ''
-            },
             setLoading: false,
             setShow: false
           }));
         }
       })
     } else if (this.state.tipeForm === 2) {
-      EditUser(this.state.post).then(res => {
-        if (res) {
-          const id = this.state.index
-          Toast.fire({
-            icon: 'success',
-            title: res.data.message
-          })
-          console.log(res.data.data)
-          this.state.data[id] = this.state.post
-          this.setState(prevState => ({
-            loadingButton: false,
-            setLoading: false,
-            setShow: false
-          }));
-        }
-      })
+
     } else if (this.state.tipeForm === 3) {
-      HapusUser(this.state.post).then(res => {
-        if (res) {
-          const id = this.state.index
-          Toast.fire({
-            icon: 'success',
-            title: res.data.message
-          })
-          console.log(res.data.data)
-          delete this.state.data[id]
-          this.setState(prevState => ({
-            loadingButton: false,
-            setLoading: false,
-            setShow: false
-          }));
-        }
-      })
+
+
     }
 
 
@@ -228,6 +196,8 @@ class IndexUser extends Component {
       setShow: true,
       post: {
         id: this.state.data[e].id,
+        status:1,
+        tanggal_pekerjaan:this.state.data[e].tanggal_pekerjaan,
         first_name: this.state.data[e].first_name,
         last_name: this.state.data[e].last_name,
         email: this.state.data[e].email,
@@ -237,17 +207,19 @@ class IndexUser extends Component {
     })
   }
 
-  handleTambah() {
+  handleVerifikasi(e) {
     this.setState({
       tipeForm: 1,
       setShow: true,
       post: {
-        id: '',
-        first_name: '',
-        last_name: '',
-        email: '',
-        role: '',
-        password: ''
+        status:1,
+        tanggal_pekerjaan:this.state.data[e].tanggal_pekerjaan,
+        id: this.state.data[e].id,
+        first_name: this.state.data[e].first_name,
+        last_name: this.state.data[e].last_name,
+        email: this.state.data[e].email,
+        role: this.state.data[e].role,
+        password: this.state.data[e].password,
       },
     })
   }
@@ -268,29 +240,36 @@ class IndexUser extends Component {
     })
   }
 
-  renderTableData() {
+  renderTableVerifikasi() {
     return this.state.data.map((user, index) => {
-      const {first_name, last_name, email, role} = user //destructuring
+      const {first_name, last_name, email, tanggal_pekerjaan, status} = user //destructuring
       return (
         <tr key={index}>
           <td>{index + 1}</td>
           <td>{first_name} {last_name}</td>
-          <td>{email}</td>
-          <td><span className="right badge badge-success">{role}</span></td>
+          <td>{moment(tanggal_pekerjaan).format("MMMM")}</td>
+          <td><span className="right badge badge-danger">Belum di Verifikasi</span></td>
           <td>
+            <button onClick={() => {
+              this.handleVerifikasi(index)
+            }} style={{marginRight: 10}}
+                    className="btn btn-danger btn-xs">
+              <i className="fas fa-check" style={{marginRight: 4}}></i>
+              Verifikasi LKH
+            </button>
             <button onClick={() => {
               this.handleEdit(index)
             }} style={{marginRight: 10}}
                     className="btn btn-info btn-xs">
-              <i className="fas fa-edit"></i>
-              Edit
+              <i className="fas fa-download" style={{marginRight: 4}}></i>
+              Download LKH
             </button>
             <button onClick={() => {
               this.handleHapus(index)
             }} style={{marginRight: 10}}
-                    className="btn btn-danger btn-xs">
-              <i className="fas fa-trash"></i>
-              Hapus
+                    className="btn btn-warning btn-xs">
+              <i className="fas fa-info" style={{marginRight: 4}}></i>
+              View LKH
             </button>
             {/*{this.state.clickTable[index] !== index ?*/}
             {/*  <button onClick={() => {*/}
@@ -324,12 +303,12 @@ class IndexUser extends Component {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0 text-dark">User</h1>
+                <h1 className="m-0 text-dark">VerifikasiLkh</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item"><a>Home</a></li>
-                  <li className="breadcrumb-item active">User</li>
+                  <li className="breadcrumb-item active">VerifikasiLkh</li>
                 </ol>
               </div>
             </div>
@@ -342,13 +321,10 @@ class IndexUser extends Component {
                 <div className="card-header">
                   <div className="row">
                     <div className="col-6">
-                      <button style={{marginRight: 10}} onClick={() => {
-                        this.handleTambah()
-                      }} className="btn btn-outline-warning">
-                        <i className="fas fa-plus"></i>
-                        Tambah User
+                      <button type="button" className="btn btn-outline-danger"><i className="fas fa-check"
+                                                                                  style={{marginRight: 4}}></i>Verifikasi
+                        Semua
                       </button>
-                      <button type="button" className="btn btn-outline-danger">Hapus</button>
                     </div>
                     <div className="col-6">
                     </div>
@@ -359,11 +335,11 @@ class IndexUser extends Component {
             <div className="col-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Data User</h3>
+                  <h3 className="card-title">Verifikasi Lkh</h3>
 
                   <div className="card-tools">
                     <div className="input-group input-group-sm" style={{width: 150}}>
-                      <input type="text" value={this.state.searchData} onChange={this.handleSearch}
+                      <input type="text" value={this.state.searchVerifikasi} onChange={this.handleSearch}
                              className="form-control float-right"
                              placeholder="Search"/>
 
@@ -379,13 +355,13 @@ class IndexUser extends Component {
                     <tr>
                       <th style={{width: 10}}>No</th>
                       <th>Nama</th>
-                      <th>Email</th>
-                      <th>Role</th>
+                      <th>Bulan</th>
+                      <th>Status</th>
                       <th>Aksi</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {this.renderTableData()}
+                    {this.renderTableVerifikasi()}
                     </tbody>
                   </table>
                 </div>
@@ -413,7 +389,10 @@ class IndexUser extends Component {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>{this.state.tipeForm === 1 ? 'Tambah User' : this.state.tipeForm === 2 ? 'Edit Data ' + this.state.post.first_name : this.state.tipeForm === 3 ? 'Hapus Data ' + this.state.post.first_name + ' ?' : ''}</Modal.Title>
+              <Modal.Title>{
+                this.state.tipeForm === 1 ? 'Verifikasi LKH '+this.state.post.first_name+' Bulan '+moment(this.state.post.tanggal_pekerjaan).format("MMMM")+' ?' :
+                  this.state.tipeForm === 2 ? 'Edit Verifikasi ' + this.state.post.first_name :
+                    this.state.tipeForm === 3 ? 'Hapus Verifikasi ' + this.state.post.first_name + ' ?' : ''}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form
@@ -435,4 +414,4 @@ class IndexUser extends Component {
   }
 }
 
-export default IndexUser
+export default IndexVerifikasiLkh

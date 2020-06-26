@@ -12,7 +12,21 @@ export const ProtectedRoute =
       {...rest}
       render={props => {
         if (localStorage.usertoken) {
-          return <Component {...props} />;
+          if(localStorage.role === 'admin'){
+            return <Component {...props} />;
+          }else{
+            return (
+              <Redirect
+                to={{
+                  pathname: "/",
+                  state: {
+                    from: props.location
+                  }
+                }}
+              />
+            );
+          }
+
         } else {
           return (
             <Redirect
@@ -29,3 +43,43 @@ export const ProtectedRoute =
     />
   );
 };
+export const ProtectedRouteUser =
+  ({
+     component: Component,
+     ...rest
+   }) => {
+    return (
+      <Route
+        {...rest}
+        render={props => {
+          if (localStorage.usertoken) {
+            if(localStorage.role === 'user'){
+              return <Component {...props} />;
+            }else{
+              return (
+                <Redirect
+                  to={{
+                    pathname: "/",
+                    state: {
+                      from: props.location
+                    }
+                  }}
+                />
+              );
+            }
+          } else {
+            return (
+              <Redirect
+                to={{
+                  pathname: "/",
+                  state: {
+                    from: props.location
+                  }
+                }}
+              />
+            );
+          }
+        }}
+      />
+    );
+  };

@@ -23,9 +23,30 @@ Route.group(() => {
 }).prefix('users')
 
 Route.group(() => {
+  Route.post('lkhShowAllByIdPerBulan', 'LkhController.showAllLkhByIdPerBulan')
+  Route.post('lkhShowAllLkhByUserSpesifik', 'LkhController.showAllLkhByUserSpesifik')
+  Route.post('lkhShowAllLkhByUser', 'LkhController.showAllLkhByUser')
+  Route.post('userShowAllLkh', 'UserController.showAllLkh')
   Route.post('userShowAll', 'UserController.showAll')
+  Route.post('lkhShowAllByUser', 'LkhController.showAllByUser')
+  Route.post('lkhShowAllById', 'LkhController.showAllLkhById')
 }).prefix('list').middleware(['auth:jwt'])
 
 Route.group(() => {
   Route.post('tambahUser', 'UserController.tambahUser')
+  Route.post('tambahLkh', 'LkhController.tambahLkh')
 }).prefix('tambah').middleware(['auth:jwt'])
+
+Route.group(() => {
+  Route.post('editUser', 'UserController.editUser')
+  Route.post('editLkh', 'LkhController.editLkh')
+}).prefix('edit').middleware(['auth:jwt'])
+
+Route.group(() => {
+  Route.post('hapusUser', 'UserController.hapusUser')
+  Route.post('hapusLkh', 'LkhController.hapusLkh')
+}).prefix('hapus').middleware(['auth:jwt'])
+
+Route.group(() => {
+  Route.post('verifikasiLkh', 'LkhController.verifikasiLkh')
+}).prefix('verifikasi').middleware(['auth:jwt'])

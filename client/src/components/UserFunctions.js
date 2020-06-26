@@ -15,25 +15,33 @@ export const register = newUser => {
 }
 
 export const login = user => {
-  return axios
-    .post('users/login', {
+  try{
+    return axios.post('users/login', {
       email: user.email,
       password: user.password
     })
-    .then(res => {
-      localStorage.setItem('usertoken', res.data.token)
+      .then(res => {
+        localStorage.setItem('usertoken', res.data.token)
 
-      const decoded = jwt_decode(res.data.token)
-      getUser(decoded.uid).then(res => {
-        localStorage.setItem('role', res.data.role)
-        console.log(res.data)
+        const decoded = jwt_decode(res.data.token)
+
+        return getUser(decoded.uid).then(res => {
+
+          localStorage.setItem('role', res.data.role)
+          localStorage.setItem('idUser',decoded.uid)
+
+          return res.data
+        })
       })
-      //console.log(res)
-      return res.data
-    })
-    .catch(err => {
-      console.log('Invalid username and password, ' + err)
-    })
+      .catch(err => {
+        console.log('Invalid username and password, ' + err)
+        return 'Invalid Username and Password'
+
+      })
+  }catch (e) {
+    return e
+  }
+
 }
 
 export const getUser = id => {

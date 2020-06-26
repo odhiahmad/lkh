@@ -5,8 +5,18 @@
   "dependencies": {
     "@hookform/error-message": "0.0.2",
     "axios": "^0.18.0",
+    "bootstrap": "^4.5.0",
+    "file-saver": "^2.0.2",
     "jwt-decode": "^2.2.0",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
+    "react-bootstrap-date-picker": "^5.1.0",
+    "react-bootstrap-table-next": "^4.0.3",
+    "react-bootstrap-table2-editor": "^1.4.0",
+    "react-bootstrap-table2-paginator": "^2.1.2",
+    "react-chartjs-2": "^2.9.0",
+    "react-datepicker": "^3.0.0",
     "react-dom": "^16.13.1",
     "react-hook-form": "^5.7.2",
     "react-modal": "^3.11.2",
@@ -14,6 +24,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "1.1.5",
     "sweetalert2": "^9.15.1",
+    "xlsx": "^0.16.2",
     "yup": "^0.29.1"
   },
   "scripts": {

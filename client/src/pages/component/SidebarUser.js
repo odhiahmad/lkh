@@ -1,12 +1,11 @@
 import React, {Component} from 'react'
 import {NavLink} from "react-router-dom";
 
-class Sidebar extends Component {
+class SidebarUser extends Component {
   logOut(e) {
 
     e.preventDefault()
     localStorage.removeItem('usertoken')
-
 
   }
 
@@ -31,7 +30,7 @@ class Sidebar extends Component {
             <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
               <li className="nav-item">
-                <NavLink to="/dashboard-admin" className="nav-link">
+                <NavLink to="/dashboard-user" className="nav-link">
                   <i className="nav-icon fas fa-home"></i>
                   <p>
                     Dashboard
@@ -39,31 +38,22 @@ class Sidebar extends Component {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/user" className="nav-link">
-                  <i className="nav-icon fas fa-users"></i>
-                  <p>
-                    Data User
-                  </p>
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink to="/data-lkh" className="nav-link">
+                <NavLink to="/lkh" className="nav-link">
                   <i className="nav-icon fas fa-book"></i>
                   <p>
-                    Data LKH
+                    Isi LKH
                   </p>
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/verifikasi-lkh" className="nav-link">
-                  <i className="nav-icon fas fa-check"></i>
+                <NavLink to="/lkh-user" className="nav-link">
+                  <i className="nav-icon fas fa-download"></i>
                   <p>
-                    Verifikasi LKH
+                    LKH
                   </p>
                 </NavLink>
               </li>
             </ul>
-
           </nav>
         </div>
       </aside>
@@ -72,4 +62,4 @@ class Sidebar extends Component {
   }
 }
 
-export default Sidebar
+export default SidebarUser

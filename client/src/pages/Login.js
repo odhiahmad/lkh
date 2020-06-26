@@ -1,6 +1,18 @@
 import React, {Component} from 'react'
 import {login} from "../components/UserFunctions";
+import Swal from 'sweetalert2'
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
 class Login extends Component {
   constructor() {
     super()
@@ -26,9 +38,21 @@ class Login extends Component {
     }
 
     login(user).then(res => {
-      if (res) {
-        this.props.history.push(`/dashboard`)
+      if(res === null || res === undefined){
+        Toast.fire({
+          icon: 'success',
+          title: 'Username atau Password Salah'
+        })
+      }else{
+        if (res.role === 'admin') {
+          this.props.history.push(`/dashboard-admin`)
+        }else if (res.role === 'user') {
+          this.props.history.push(`/dashboard-user`)
+        }else{
+          this.props.history.push(`/`)
+        }
       }
+
     })
   }
 
