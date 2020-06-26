@@ -6,6 +6,7 @@ import DashboardUser from "./pages-dashboard/DashboardUser";
 import IndexLkh from "./pages-lkh/IndexLkh";
 import IndexProfile from "./pages-profile/IndexProfile";
 import IndexLkhUser from "./pages-lkh-user/IndexLkhUser"
+import IndexSuratTugas from "./pages-surat-tugas/IndexSuratTugas";
 import jwt_decode from "jwt-decode";
 import {getUser} from "../components/UserFunctions";
 
@@ -56,6 +57,8 @@ class MainUser extends Component {
           </nav>
           <SidebarUser/>
           <Switch>
+
+            <Route path="/surat-tugas" component={IndexSuratTugas}/>
             <Route path="/profile" component={IndexProfile}/>
             <Route path="/dashboard-user" component={DashboardUser}/>
             <Route path="/lkh" component={IndexLkh}/>

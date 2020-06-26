@@ -46,6 +46,14 @@ class SidebarUser extends Component {
                 </NavLink>
               </li>
               <li className="nav-item">
+                <NavLink to="/surat-tugas" className="nav-link">
+                  <i className="nav-icon fas fa-book"></i>
+                  <p>
+                    Surat Tugas
+                  </p>
+                </NavLink>
+              </li>
+              <li className="nav-item">
                 <NavLink to="/lkh-user" className="nav-link">
                   <i className="nav-icon fas fa-download"></i>
                   <p>
