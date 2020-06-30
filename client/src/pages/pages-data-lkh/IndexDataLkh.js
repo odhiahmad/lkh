@@ -280,7 +280,7 @@ class IndexDataLkh extends Component {
   render() {
     const handleClose = () => this.setState({setShow: false});
     return (
-      <div className="content-wrapper">
+      <div style={{marginLeft:10,marginRight:10}}>
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">

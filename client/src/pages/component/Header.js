@@ -1,17 +1,34 @@
-import {Link} from "react-router-dom";
+import {Link,withRouter} from "react-router-dom";
 import React, {Component} from "react";
 import Sidebar from "./Sidebar";
-
+import Swal from 'sweetalert2'
 class Header extends Component {
 
   logOut(e) {
+    Swal.fire({
+      title: 'Apakah anda ingin keluar',
+      text: "Akun anda akan keluar dari sesi login sekarang!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Keluar!',
+      cancelButtonText:'Tidak'
+    }).then((result) => {
+      if (result.value) {
+        e.preventDefault()
+        localStorage.removeItem('usertoken')
+        localStorage.removeItem('role')
+        this.props.history.push('/')
+      }
+    })
 
-    e.preventDefault()
-    localStorage.removeItem('usertoken')
-    localStorage.removeItem('role')
-    this.props.history.push('/login')
 
 
+  }
+
+  toProfile(e) {
+    this.props.history.push('/profile')
   }
 
   render() {
@@ -23,11 +40,12 @@ class Header extends Component {
           </li>
         </ul>
         <ul className="navbar-nav ml-auto">
-          <li className="nav-item">
-            <Link to="/profile" className="nav-link" data-widget="control-sidebar" data-slide="true" role="button">
-              <i className="fas fa-user"></i>
-            </Link>
-          </li>
+
+          {/*<li className="nav-item">*/}
+          {/*  <NavLink to="/profile" className="nav-link"  role="button">*/}
+          {/*    <i className="fas fa-user"></i>*/}
+          {/*  </NavLink>*/}
+          {/*</li>*/}
           <li className="nav-item">
             <Link to="/" onClick={this.logOut.bind(this)} className="nav-link" data-widget="control-sidebar"
                   data-slide="true" role="button">
@@ -38,4 +56,4 @@ class Header extends Component {
       </nav>
     )
   }
-}export default Header
+}export default withRouter(Header)

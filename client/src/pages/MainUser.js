@@ -58,7 +58,7 @@ class MainUser extends Component {
           <SidebarUser/>
           <Switch>
 
-            <Route path="/surat-tugas" component={IndexSuratTugas}/>
+            {/*<Route path="/surat-tugas" component={IndexSuratTugas}/>*/}
             <Route path="/profile" component={IndexProfile}/>
             <Route path="/dashboard-user" component={DashboardUser}/>
             <Route path="/lkh" component={IndexLkh}/>

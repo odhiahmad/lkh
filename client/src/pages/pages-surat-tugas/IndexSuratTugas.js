@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Form from './Form'
-import {getAllLkh, EditLkh, TambahLkh, HapusLkh} from './ApiLkh'
+import {getAllLkh, EditLkh, TambahLkh, HapusLkh} from './ApiSuratTugas'
 import {Button, Modal} from 'react-bootstrap';
 import Swal from 'sweetalert2'
 import moment from 'moment';
@@ -312,7 +312,7 @@ class IndexSuratTugas extends Component {
   render() {
     const handleClose = () => this.setState({setShow: false});
     return (
-      <div className="content-wrapper">
+      <div style={{marginLeft:10,marginRight:10}}>
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">

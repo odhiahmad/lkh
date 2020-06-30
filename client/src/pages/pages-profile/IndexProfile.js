@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 class IndexProfile extends Component {
   render() {
     return (
-      <div className="content-wrapper">
+      <div style={{marginLeft:10,marginRight:10}}>
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
@@ -21,6 +21,7 @@ class IndexProfile extends Component {
           </div>
         </div>
         <section className="content">
+          <p>Tes</p>
         </section>
       </div>
     )

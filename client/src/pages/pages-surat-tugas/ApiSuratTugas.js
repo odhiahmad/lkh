@@ -1,14 +1,39 @@
 import axios from 'axios'
 
 
-export const TambahUser = newUser => {
+export const TambahLkh = newLkh => {
+
   return axios
-    .post('tambah/tambahUser', {
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
-        email: newUser.email,
-        password: newUser.password,
-        role: newUser.role,
+    .post('tambah/tambahLkh', {
+        id_user: localStorage.idUser,
+        tanggal_pekerjaan: newLkh.tanggal_pekerjaan,
+        jam_pekerjaan: newLkh.jam_pekerjaan,
+        detail_pekerjaan: newLkh.detail_pekerjaan,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.usertoken}`
+        },
+      }, {
+        timeOut: 1000
+      }
+    )
+    .then(response => {
+      console.log(newLkh.tanggal_pekerjaan)
+      return response.data
+    }).catch(err => {
+      return err.code
+    })
+}
+
+export const EditLkh = newLkh => {
+
+  return axios
+    .post('edit/editLkh', {
+        id: newLkh.id,
+        id_user: localStorage.idUser,
+        detail_pekerjaan: newLkh.detail_pekerjaan,
+        jam_pekerjaan: newLkh.jam_pekerjaan
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -25,13 +50,10 @@ export const TambahUser = newUser => {
     })
 }
 
-export const EditUser = newUser => {
+export const HapusLkh = newLkh => {
   return axios
-    .post('edit/editUser', {
-        id: newUser.id,
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
-        role: newUser.role,
+    .post('hapus/hapusLkh', {
+        id: newLkh.id,
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -48,30 +70,10 @@ export const EditUser = newUser => {
     })
 }
 
-export const HapusUser = newUser => {
-  return axios
-    .post('hapus/hapusUser', {
-        id: newUser.id,
-        first_name: newUser.first_name,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.usertoken}`
-        },
-      }, {
-        timeOut: 1000
-      }
-    )
-    .then(response => {
-      return response.data
-    }).catch(err => {
-      return err.code
-    })
-}
+export const getAllLkh = postData => {
 
-export const getAllUser = postData => {
-
-  return axios.post('list/userShowAll', {
+  return axios.post('list/lkhShowAllByUser', {
+      id_user: localStorage.idUser,
       page: postData.page,
       limit: postData.limit,
       cari: postData.searchData

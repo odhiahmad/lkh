@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 class DashboardUser extends Component {
   render() {
     return (
-      <div className="content-wrapper">
+      <div>
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">

@@ -112,6 +112,20 @@ class UserController {
     }
   }
 
+  async getUser({response}) {
+    try {
+
+        const user = await User.query()
+          .from('users')
+          .paginate(1,50)
+        return response.json(user)
+
+
+    } catch (error) {
+      throw error
+    }
+  }
+
   async showAllLkh({request, response}) {
     try {
       if(request.input('cari') !== null){

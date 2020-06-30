@@ -28,9 +28,10 @@ Route.group(() => {
   Route.post('lkhShowAllLkhByUser', 'LkhController.showAllLkhByUser')
   Route.post('userShowAllLkh', 'UserController.showAllLkh')
   Route.post('userShowAll', 'UserController.showAll')
-  Route.post('lkhShowAllByUser', 'LkhController.showAllByUser')
+  Route.get('getUser', 'UserController.getUser')
+Route.post('lkhShowAllByUser', 'LkhController.showAllByUser')
   Route.post('lkhShowAllById', 'LkhController.showAllLkhById')
-}).prefix('list').middleware(['auth:jwt'])
+}).prefix('list')
 
 Route.group(() => {
   Route.post('tambahUser', 'UserController.tambahUser')
