@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
-import {login} from "../components/UserFunctions";
-import Swal from 'sweetalert2'
+import React, { Component } from 'react';
+import { login } from '../components/UserFunctions';
+import Swal from 'sweetalert2';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -9,51 +9,63 @@ const Toast = Swal.mixin({
   timer: 3000,
   timerProgressBar: true,
   onOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
-  }
-})
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  },
+});
+
 class Login extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
       email: '',
-      password: ''
-    }
+      password: '',
+    };
 
-    this.onChange = this.onChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onChange(e) {
-    this.setState({[e.target.name]: e.target.value})
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   onSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
 
     const user = {
       email: this.state.email,
-      password: this.state.password
-    }
+      password: this.state.password,
+    };
 
-    login(user).then(res => {
-      if(res === null || res === undefined){
-        Toast.fire({
-          icon: 'success',
-          title: 'Username atau Password Salah'
-        })
-      }else{
-        if (res.role === 'admin') {
-          this.props.history.push(`/dashboard-admin`)
-        }else if (res.role === 'user') {
-          this.props.history.push(`/dashboard-user`)
-        }else{
-          this.props.history.push(`/`)
+    login(user)
+      .then(res => {
+        console.log(res);
+        if (res === null || res === undefined) {
+          Toast.fire({
+            icon: 'success',
+            title: 'Username atau Password Salah',
+          });
+        } else {
+          if (res.role === 'karu') {
+            this.props.history.push(`/dashboard-karu`);
+          } else if (res.role === 'user') {
+            this.props.history.push(`/dashboard-user`);
+          } else if (res.role === 'admin') {
+            this.props.history.push(`/dashboard-admin`);
+          } else if (res.role === 'kabid') {
+            this.props.history.push(`/dashboard-kabid`);
+          } else if (res.role === 'kepala') {
+            this.props.history.push(`/dashboard-kepala`);
+          } else {
+            this.props.history.push(`/`);
+          }
         }
-      }
 
-    })
+      })
+      .catch(err => {
+        console.log('Invalid username and password, ' + err);
+      });
   }
 
   render() {
@@ -125,8 +137,8 @@ class Login extends Component {
         </div>
       </div>
       </body>
-    )
+    );
   }
 }
 
-export default Login
+export default Login;

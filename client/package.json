@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@hookform/error-message": "0.0.2",
+    "@react-pdf/renderer": "^2.0.0-beta.6",
+    "@react-pdf/styled-components": "^1.4.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.5.0",
     "file-saver": "^2.0.2",
@@ -22,7 +24,10 @@
     "react-modal": "^3.11.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "1.1.5",
+    "react-router-transition": "^2.0.0",
+    "react-scripts": "2.0.0",
+    "react-select": "^3.1.0",
+    "react-transition-group": "^4.4.1",
     "sweetalert2": "^9.15.1",
     "xlsx": "^0.16.2",
     "yup": "^0.29.1"
@@ -33,5 +38,11 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:3333"
+  "proxy": "http://localhost:3333",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

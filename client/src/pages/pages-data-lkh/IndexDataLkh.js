@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Form from './Form'
-import {getAllDataLkh, EditDataLkh, TambahDataLkh,VerifikasiLkh} from './ApiDataLkh'
+import {getAllDataLkh, EditDataLkh,VerifikasiLkh} from './ApiDataLkh'
 import {Button, Modal} from 'react-bootstrap';
 import Swal from 'sweetalert2'
 import moment from "moment";
@@ -257,7 +257,7 @@ class IndexDataLkh extends Component {
 
   renderTableData() {
     return this.state.data.map((user, index) => {
-      const {id_user,first_name, last_name, email, tanggal_pekerjaan, status} = user //destructuring
+      const {id_user,first_name, last_name, email} = user //destructuring
       return (
         <tr key={index}>
           <td>{index + 1}</td>

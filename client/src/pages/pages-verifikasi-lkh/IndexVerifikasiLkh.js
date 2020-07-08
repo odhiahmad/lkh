@@ -257,20 +257,20 @@ class IndexVerifikasiLkh extends Component {
               <i className="fas fa-check" style={{marginRight: 4}}></i>
               Verifikasi LKH
             </button>
-            <button onClick={() => {
-              this.handleEdit(index)
-            }} style={{marginRight: 10}}
-                    className="btn btn-info btn-xs">
-              <i className="fas fa-download" style={{marginRight: 4}}></i>
-              Download LKH
-            </button>
-            <button onClick={() => {
-              this.handleHapus(index)
-            }} style={{marginRight: 10}}
-                    className="btn btn-warning btn-xs">
-              <i className="fas fa-info" style={{marginRight: 4}}></i>
-              View LKH
-            </button>
+            {/*<button onClick={() => {*/}
+            {/*  this.handleEdit(index)*/}
+            {/*}} style={{marginRight: 10}}*/}
+            {/*        className="btn btn-info btn-xs">*/}
+            {/*  <i className="fas fa-download" style={{marginRight: 4}}></i>*/}
+            {/*  Download LKH*/}
+            {/*</button>*/}
+            {/*<button onClick={() => {*/}
+            {/*  this.handleHapus(index)*/}
+            {/*}} style={{marginRight: 10}}*/}
+            {/*        className="btn btn-warning btn-xs">*/}
+            {/*  <i className="fas fa-info" style={{marginRight: 4}}></i>*/}
+            {/*  View LKH*/}
+            {/*</button>*/}
             {/*{this.state.clickTable[index] !== index ?*/}
             {/*  <button onClick={() => {*/}
             {/*    this.handleClickTable(index)*/}
@@ -316,22 +316,22 @@ class IndexVerifikasiLkh extends Component {
         </div>
         <section className="content">
           <div className="row">
-            <div className="col-12">
-              <div className="card">
-                <div className="card-header">
-                  <div className="row">
-                    <div className="col-6">
-                      <button type="button" className="btn btn-outline-danger"><i className="fas fa-check"
-                                                                                  style={{marginRight: 4}}></i>Verifikasi
-                        Semua
-                      </button>
-                    </div>
-                    <div className="col-6">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/*<div className="col-12">*/}
+            {/*  <div className="card">*/}
+            {/*    <div className="card-header">*/}
+            {/*      <div className="row">*/}
+            {/*        <div className="col-6">*/}
+            {/*          <button type="button" className="btn btn-outline-danger"><i className="fas fa-check"*/}
+            {/*                                                                      style={{marginRight: 4}}></i>Verifikasi*/}
+            {/*            Semua*/}
+            {/*          </button>*/}
+            {/*        </div>*/}
+            {/*        <div className="col-6">*/}
+            {/*        </div>*/}
+            {/*      </div>*/}
+            {/*    </div>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
             <div className="col-12">
               <div className="card">
                 <div className="card-header">

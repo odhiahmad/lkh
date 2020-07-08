@@ -40,8 +40,10 @@ class IndexUser extends Component {
         first_name: '',
         last_name: '',
         email: '',
-        role: '',
-        password: ''
+        role: 'user',
+        password: '',
+        jabatan:'',
+        gelar:'',
       },
       modalShow: "modal fade"
     };
@@ -151,7 +153,7 @@ class IndexUser extends Component {
   };
 
   handleClickTable(e) {
-    this.state.clickTable[e] = true
+
   }
 
   handleSubmit = e => {
@@ -170,13 +172,6 @@ class IndexUser extends Component {
           this.setState(prevState => ({
             loadingButton: false,
             data: [...prevState.data, res.data.data],
-            post: {
-              first_name: '',
-              last_name: '',
-              email: '',
-              role: '',
-              password: ''
-            },
             setLoading: false,
             setShow: false
           }));
@@ -233,6 +228,8 @@ class IndexUser extends Component {
         email: this.state.data[e].email,
         role: this.state.data[e].role,
         password: this.state.data[e].password,
+        jabatan:this.state.data[e].jabatan,
+        gelar:this.state.data[e].gelar,
       },
     })
   }
@@ -246,8 +243,10 @@ class IndexUser extends Component {
         first_name: '',
         last_name: '',
         email: '',
-        role: '',
-        password: ''
+        role: 'user',
+        password: '',
+        jabatan:'',
+        gelar:'',
       },
     })
   }
@@ -264,18 +263,21 @@ class IndexUser extends Component {
         email: this.state.data[e].email,
         role: this.state.data[e].role,
         password: this.state.data[e].password,
+        jabatan:this.state.data[e].jabatan,
+        gelar:this.state.data[e].gelar,
       },
     })
   }
 
   renderTableData() {
     return this.state.data.map((user, index) => {
-      const {first_name, last_name, email, role} = user //destructuring
+      const {first_name, last_name, email, role,gelar,jabatan} = user //destructuring
       return (
         <tr key={index}>
           <td>{index + 1}</td>
-          <td>{first_name} {last_name}</td>
+          <td>{first_name} {last_name}{gelar}</td>
           <td>{email}</td>
+          <td>{jabatan}</td>
           <td><span className="right badge badge-success">{role}</span></td>
           <td>
             <button onClick={() => {
@@ -380,6 +382,7 @@ class IndexUser extends Component {
                       <th style={{width: 10}}>No</th>
                       <th>Nama</th>
                       <th>Email</th>
+                      <th>Jabatan</th>
                       <th>Role</th>
                       <th>Aksi</th>
                     </tr>

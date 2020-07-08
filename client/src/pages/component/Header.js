@@ -1,6 +1,5 @@
 import {Link,withRouter} from "react-router-dom";
 import React, {Component} from "react";
-import Sidebar from "./Sidebar";
 import Swal from 'sweetalert2'
 class Header extends Component {
 

@@ -1,4 +1,4 @@
-import {useForm} from "react-hook-form";
+import { useForm } from 'react-hook-form/dist/react-hook-form.ie11'
 import React from 'react'
 // import {TambahUser} from './ApiUser'
 
@@ -38,6 +38,28 @@ export default ({post,handleSubmitForm,handleChange,loadingButton,tipeForm}) => 
             {errors.lastName && errors.lastName.message}
           </div>
           <div className="form-group-sm">
+            <label>Gelar</label>
+            <input
+              onChange={handleChange}
+              defaultValue={post.gelar}
+              className={errors.gelar ? "form-control is-invalid" : "form-control is-valid"}
+              placeholder="Gelar" name="gelar" ref={register({
+              required: true
+            })}/>
+            {errors.gelar && errors.gelar.message}
+          </div>
+          <div className="form-group-sm">
+            <label>Jabatan</label>
+            <input
+              onChange={handleChange}
+              defaultValue={post.jabatan}
+              className={errors.jabatan ? "form-control is-invalid" : "form-control is-valid"}
+              placeholder="Jabatan" name="jabatan" ref={register({
+              required: true
+            })}/>
+            {errors.jabatan && errors.jabatan.message}
+          </div>
+          <div className="form-group-sm">
             <label>Email</label>
             <input
               onChange={handleChange}
@@ -70,9 +92,11 @@ export default ({post,handleSubmitForm,handleChange,loadingButton,tipeForm}) => 
               {
                 required: true
               }
-            )} name="role" defaultValue={post.role} onChange={handleChange} className={errors.role ? "form-control is-invalid" : "form-control is-valid"}>
-              <option value="admin">Admin</option>
+            )} name="role" defaultValue={post.role} onChange={handleChange} className="form-control">
               <option value="user">User</option>
+              <option value="karu">Karu</option>
+              <option value="kabid">Kabid</option>
+              <option value="kepala">Kepala</option>
             </select>
             {errors.roleForm && errors.roleForm.message}
           </div>
@@ -111,6 +135,28 @@ export default ({post,handleSubmitForm,handleChange,loadingButton,tipeForm}) => 
               required: true
             })}/>
             {errors.lastName && errors.lastName.message}
+          </div>
+          <div className="form-group-sm">
+            <label>Gelar</label>
+            <input
+              onChange={handleChange}
+              defaultValue={post.gelar}
+              className={errors.gelar ? "form-control is-invalid" : "form-control is-valid"}
+              placeholder="Gelar" name="gelar" ref={register({
+              required: true
+            })}/>
+            {errors.gelar && errors.gelar.message}
+          </div>
+          <div className="form-group-sm">
+            <label>Jabatan</label>
+            <input
+              onChange={handleChange}
+              defaultValue={post.jabatan}
+              className={errors.jabatan ? "form-control is-invalid" : "form-control is-valid"}
+              placeholder="Jabatan" name="jabatan" ref={register({
+              required: true
+            })}/>
+            {errors.jabatan}
           </div>
           <div className="form-group-sm">
             <label>Role</label>

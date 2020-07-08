@@ -10,17 +10,6 @@ import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 
 moment().locale('id')
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  onOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
-  }
-})
 
 class IndexDataDetailLkhDetail extends Component {
   constructor() {
@@ -210,7 +199,7 @@ class IndexDataDetailLkhDetail extends Component {
 
   renderTableData() {
     return this.state.data.map((user, index) => {
-      const {first_name, last_name, email, tanggal_pekerjaan, status} = user //destructuring
+      const {tanggal_pekerjaan, status} = user //destructuring
       return (
         <tr key={index}>
           <td>{index + 1}</td>
@@ -252,7 +241,6 @@ class IndexDataDetailLkhDetail extends Component {
 
   render() {
     const namaUser = this.state.dataProfil.first_name + ' ' + this.state.dataProfil.last_name
-    const email = this.state.dataProfil.email
     const role = this.state.dataProfil.role
     const handleClose = () => this.setState({setShow: false});
     return (

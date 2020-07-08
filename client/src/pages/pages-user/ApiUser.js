@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 
 export const TambahUser = newUser => {
@@ -9,21 +9,24 @@ export const TambahUser = newUser => {
         email: newUser.email,
         password: newUser.password,
         role: newUser.role,
+        jabatan: newUser.jabatan,
+        gelar: newUser.gelar,
       }, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.usertoken}`
+          Authorization: `Bearer ${localStorage.usertoken}`,
         },
       }, {
-        timeOut: 1000
-      }
+        timeOut: 1000,
+      },
     )
     .then(response => {
-      return response.data
-    }).catch(err => {
-      return err.code
+      return response.data;
     })
-}
+    .catch(err => {
+      return err.code;
+    });
+};
 
 export const EditUser = newUser => {
   return axios
@@ -32,21 +35,24 @@ export const EditUser = newUser => {
         first_name: newUser.first_name,
         last_name: newUser.last_name,
         role: newUser.role,
+        jabatan: newUser.jabatan,
+        gelar: newUser.gelar,
       }, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.usertoken}`
+          Authorization: `Bearer ${localStorage.usertoken}`,
         },
       }, {
-        timeOut: 1000
-      }
+        timeOut: 1000,
+      },
     )
     .then(response => {
-      return response.data
-    }).catch(err => {
-      return err.code
+      return response.data;
     })
-}
+    .catch(err => {
+      return err.code;
+    });
+};
 
 export const HapusUser = newUser => {
   return axios
@@ -56,33 +62,34 @@ export const HapusUser = newUser => {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.usertoken}`
+          Authorization: `Bearer ${localStorage.usertoken}`,
         },
       }, {
-        timeOut: 1000
-      }
+        timeOut: 1000,
+      },
     )
     .then(response => {
-      return response.data
-    }).catch(err => {
-      return err.code
+      return response.data;
     })
-}
+    .catch(err => {
+      return err.code;
+    });
+};
 
 export const getAllUser = postData => {
 
   return axios.post('list/userShowAll', {
       page: postData.page,
       limit: postData.limit,
-      cari: postData.searchData
+      cari: postData.searchData,
     }, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${postData.token}`
+        Authorization: `Bearer ${postData.token}`,
       },
-    }
+    },
   )
     .then(res => {
-      return res.data
-    })
-}
+      return res.data;
+    });
+};

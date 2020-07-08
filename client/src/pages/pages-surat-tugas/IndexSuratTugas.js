@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
 import Form from './Form'
-import {getAllLkh, EditLkh, TambahLkh, HapusLkh} from './ApiSuratTugas'
+import {getAllSuratTugas, EditSuratTugas, TambahSuratTugas, HapusSuratTugas,PdfDocument} from './ApiSuratTugas'
 import {Button, Modal} from 'react-bootstrap';
 import Swal from 'sweetalert2'
 import moment from 'moment';
+import {Page, Text, View, Document, StyleSheet, PDFDownloadLink} from '@react-pdf/renderer';
+
 
 const Toast = Swal.mixin({
   toast: true,
@@ -17,6 +19,32 @@ const Toast = Swal.mixin({
   }
 })
 
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'row',
+    backgroundColor: '#E4E4E4'
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    flexGrow: 1
+  }
+});
+
+const MyDocument = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.section}>
+        <Text>Section #1</Text>
+      </View>
+      <View style={styles.section}>
+        <Text>Section #2</Text>
+      </View>
+    </Page>
+  </Document>
+);
+
 class IndexSuratTugas extends Component {
   constructor() {
     super();
@@ -27,7 +55,9 @@ class IndexSuratTugas extends Component {
       lastPage: '',
       panjang: 0,
 
+      dataUser: [],
       data: [],
+      dataProfil:[],
       searchData: '',
       loadingButton: false,
 
@@ -38,9 +68,9 @@ class IndexSuratTugas extends Component {
       setShow: false,
       post: {
         id: '',
-        tanggal_pekerjaan: '',
-        jam_pekerjaan: '',
-        detail_pekerjaan: '',
+        tanggal_tugas: '',
+        id_user_penyetuju: '',
+        detail_tugas: '',
       },
     };
   }
@@ -57,13 +87,20 @@ class IndexSuratTugas extends Component {
       searchData: null,
     }
 
-    getAllLkh(postData).then(data => {
+    getAllSuratTugas(postData).then(data => {
       this.setState({
-        data: data.data,
-        lastPage: data.lastPage,
-        panjang: data.total,
+        data: data.dataSuratTugas.data,
+        lastPage: data.dataSuratTugas.lastPage,
+        panjang: data.dataSuratTugas.total,
+        dataProfil:data.dataUser
       })
     })
+
+    // getAllUser().then(data => {
+    //   this.setState({
+    //     dataUser: data,
+    //   })
+    // })
   }
 
   handlePrevPage = () => {
@@ -77,14 +114,16 @@ class IndexSuratTugas extends Component {
       searchData: null,
     }
 
-    getAllLkh(postData).then(data => {
+    getAllSuratTugas(postData).then(data => {
 
       this.setState({
 
-        data: data.data,
-        lastPage: data.lastPage,
-        page: data.page,
-        panjang: data.total,
+
+        page: data.dataSuratTugas.page,
+        data: data.dataSuratTugas.data,
+        lastPage: data.dataSuratTugas.lastPage,
+        panjang: data.dataSuratTugas.total,
+        dataProfil:data.dataUser
       })
     })
   }
@@ -100,11 +139,13 @@ class IndexSuratTugas extends Component {
       limit: this.state.limit
     }
 
-    getAllLkh(postData).then(data => {
+    getAllSuratTugas(postData).then(data => {
       this.setState({
-        data: data.data,
-        lastPage: data.lastPage,
-        page: data.page,
+        page: data.dataSuratTugas.page,
+        data: data.dataSuratTugas.data,
+        lastPage: data.dataSuratTugas.lastPage,
+        panjang: data.dataSuratTugas.total,
+        dataProfil:data.dataUser
       })
     })
   }
@@ -126,11 +167,13 @@ class IndexSuratTugas extends Component {
         limit: this.state.limit
       }
 
-      getAllLkh(postData).then(data => {
+      getAllSuratTugas(postData).then(data => {
         this.setState({
-          data: data.data,
-          lastPage: data.lastPage,
-          page: data.page,
+          page: data.dataSuratTugas.page,
+          data: data.dataSuratTugas.data,
+          lastPage: data.dataSuratTugas.lastPage,
+          panjang: data.dataSuratTugas.total,
+          dataProfil:data.dataUser
         })
       })
     } else {
@@ -148,17 +191,12 @@ class IndexSuratTugas extends Component {
   };
 
   handleChangeDate = date => {
-    var jam = date.getHours()
-    var minute = date.getMinutes()
-
-    var getJam = jam+':'+minute+':00'
     this.setState({
       post: {
-        tanggal_pekerjaan: date,
-        jam_pekerjaan:getJam
+        tanggal_tugas: date,
       }
     });
-    console.log(this.state.post.tanggal_pekerjaan)
+    console.log(this.state.post.tanggal_tugas)
   };
 
   handleClickTable(e) {
@@ -171,7 +209,8 @@ class IndexSuratTugas extends Component {
     })
 
     if (this.state.tipeForm === 1) {
-      TambahLkh(this.state.post).then(res => {
+      console.log(this.state.post)
+      TambahSuratTugas(this.state.post).then(res => {
         if (res) {
           Toast.fire({
             icon: 'success',
@@ -182,9 +221,9 @@ class IndexSuratTugas extends Component {
             loadingButton: false,
             data: [...prevState.data, res.data.data],
             post: {
-              tanggal_pekerjaan: '',
-              jam_pekerjaan: '',
-              detail_pekerjaan: '',
+              tanggal_tugas: '',
+              id_user_penyetuju: '',
+              detail_tugas: '',
             },
             setLoading: false,
             setShow: false
@@ -192,14 +231,14 @@ class IndexSuratTugas extends Component {
         }
       })
     } else if (this.state.tipeForm === 2) {
-      EditLkh(this.state.post).then(res => {
+      EditSuratTugas(this.state.post).then(res => {
         if (res) {
           const id = this.state.index
           Toast.fire({
             icon: 'success',
             title: res.data.message
           })
-          console.log(res.data.data.detail_pekerjaan)
+          console.log(res.data.data.detail_tugas)
           this.state.data[id] = this.state.post
           this.setState(prevState => ({
             loadingButton: false,
@@ -209,7 +248,7 @@ class IndexSuratTugas extends Component {
         }
       })
     } else if (this.state.tipeForm === 3) {
-      HapusLkh(this.state.post).then(res => {
+      HapusSuratTugas(this.state.post).then(res => {
         if (res) {
           const id = this.state.index
           Toast.fire({
@@ -231,7 +270,7 @@ class IndexSuratTugas extends Component {
   };
 
   handleEdit(e) {
-    // var getTanggal = this.state.data[e].tanggal_pekerjaan;
+    // var getTanggal = this.state.data[e].tanggal_tugas;
     // var Tanggal =  getTanggal.substring(0,10);
     //
     // var getTahun = Tanggal.substring(0,4)
@@ -243,13 +282,12 @@ class IndexSuratTugas extends Component {
       tipeForm: 2,
       setShow: true,
       post: {
-        id: this.state.data[e].id,
-        detail_pekerjaan: this.state.data[e].detail_pekerjaan,
-        jam_pekerjaan:this.state.data[e].jam_pekerjaan
+        id: this.state.data[e].id_surat_tugas,
+        detail_tugas: this.state.data[e].detail_tugas,
+        id_user_penyetuju: this.state.data[e].id_user_penyetuju
       },
     })
   }
-
 
   handleTambah() {
     this.setState({
@@ -257,9 +295,9 @@ class IndexSuratTugas extends Component {
       setShow: true,
       post: {
         id: '',
-        tanggal_pekerjaan: new Date(),
-        jam_pekerjaan: new Date(),
-        detail_pekerjaan: '',
+        tanggal_tugas: new Date(),
+        id_user_penyetuju: new Date(),
+        detail_tugas: '',
       },
     })
   }
@@ -270,10 +308,10 @@ class IndexSuratTugas extends Component {
       tipeForm: 3,
       setShow: true,
       post: {
-        id: this.state.data[e].id,
-        tanggal_pekerjaan: this.state.data[e].tanggal_pekerjaan,
-        jam_pekerjaan: this.state.data[e].jam_pekerjaan,
-        detail_pekerjaan: this.state.data[e].detail_pekerjaan,
+        id: this.state.data[e].id_surat_tugas,
+        tanggal_tugas: this.state.data[e].tanggal_tugas,
+        id_user_penyetuju: this.state.data[e].id_user_penyetuju,
+        detail_tugas: this.state.data[e].detail_tugas,
       },
     })
   }
@@ -281,13 +319,13 @@ class IndexSuratTugas extends Component {
   renderTableData() {
     moment.locale();
     return this.state.data.map((lkh, index) => {
-      const {tanggal_pekerjaan, jam_pekerjaan, detail_pekerjaan} = lkh //destructuring
+      const {tanggal_tugas, id_user_penyetuju, detail_tugas} = lkh //destructuring
       return (
         <tr key={index}>
           <td>{index + 1}</td>
-          <td>{moment(tanggal_pekerjaan).format('LL')}</td>
-          <td>{jam_pekerjaan}</td>
-          <td>{detail_pekerjaan}</td>
+          <td>{moment(tanggal_tugas).format('LL')}</td>
+          <td>{id_user_penyetuju}</td>
+          <td>{detail_tugas}</td>
           <td>
             <button onClick={() => {
               this.handleEdit(index)
@@ -303,6 +341,7 @@ class IndexSuratTugas extends Component {
               <i className="fas fa-trash"></i>
               Hapus
             </button>
+
           </td>
         </tr>
       )
@@ -312,17 +351,17 @@ class IndexSuratTugas extends Component {
   render() {
     const handleClose = () => this.setState({setShow: false});
     return (
-      <div style={{marginLeft:10,marginRight:10}}>
+      <div style={{marginLeft: 10, marginRight: 10}}>
         <div className="content-header">
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1 className="m-0 text-dark">Lkh</h1>
+                <h1 className="m-0 text-dark">Surat Tugas</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item"><a>Home</a></li>
-                  <li className="breadcrumb-item active">Lkh</li>
+                  <li className="breadcrumb-item active">Surat Tugas</li>
                 </ol>
               </div>
             </div>
@@ -339,7 +378,7 @@ class IndexSuratTugas extends Component {
                         this.handleTambah()
                       }} className="btn btn-outline-warning">
                         <i className="fas fa-plus"></i>
-                        Tambah Lkh
+                        Tambah SuratTugas
                       </button>
                       <button type="button" className="btn btn-outline-danger">Hapus</button>
                     </div>
@@ -352,7 +391,7 @@ class IndexSuratTugas extends Component {
             <div className="col-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Data Lkh</h3>
+                  <h3 className="card-title">Data SuratTugas</h3>
 
                   <div className="card-tools">
                     <div className="input-group input-group-sm" style={{width: 150}}>
@@ -371,8 +410,8 @@ class IndexSuratTugas extends Component {
                     <thead>
                     <tr>
                       <th style={{width: 10}}>No</th>
-                      <th>Tanggal Pekerjaan</th>
-                      <th>Jam Pekerjaan</th>
+                      <th>Tanggal Tugas</th>
+                      <th>Penyetuju</th>
                       <th>Detail</th>
                       <th>Aksi</th>
                     </tr>
@@ -406,10 +445,11 @@ class IndexSuratTugas extends Component {
             keyboard={false}
           >
             <Modal.Header closeButton>
-              <Modal.Title>{this.state.tipeForm === 1 ? 'Tambah Lkh' : this.state.tipeForm === 2 ? 'Edit Data' : this.state.tipeForm === 3 ? 'Hapus Data LKH Berikut ?' : ''}</Modal.Title>
+              <Modal.Title>{this.state.tipeForm === 1 ? 'Tambah Surat Tugas' : this.state.tipeForm === 2 ? 'Edit Data' : this.state.tipeForm === 3 ? 'Hapus Data Surat Tugas Berikut ?' : ''}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form
+                dataUser={this.state.dataUser}
                 handleChangeDate={this.handleChangeDate}
                 tipeForm={this.state.tipeForm}
                 loadingButton={this.state.loadingButton}

@@ -29,12 +29,14 @@ class UserController {
   }
 
   async tambahUser({request, response}) {
-    const {first_name, last_name, email, password,role} = request.only([
+    const {first_name, last_name, email, password,role,jabatan,gelar} = request.only([
       'first_name',
       'last_name',
       'email',
       'password',
-      'role'
+      'role',
+      'gelar',
+      'jabatan'
     ])
 
     const user = await User.create({
@@ -42,7 +44,9 @@ class UserController {
       last_name,
       email,
       password,
-      role
+      role,
+      jabatan,
+      gelar
     })
     return response.send({
       data:{
@@ -56,9 +60,12 @@ class UserController {
   async editUser({request, response}) {
     const id = request.input('id');;
     const user = await User.find(id);
+    user.jabatan = request.input('jabatan');
+    user.gelar = request.input('gelar');
     user.first_name = request.input('first_name');
     user.last_name = request.input('last_name');
     user.role = request.input('role');
+
 
     await user.save();
 
@@ -77,7 +84,7 @@ class UserController {
       first_name: user.first_name,
       last_name: user.last_name,
       email: user.email,
-      role: user.role
+      role: user.role,
     }
     return response.json(res)
   }
@@ -126,6 +133,20 @@ class UserController {
     }
   }
 
+  async getAllUser({response}) {
+    try {
+
+      const user = await User.query()
+        .from('users')
+        .fetch()
+      return response.json(user)
+
+
+    } catch (error) {
+      throw error
+    }
+  }
+
   async showAllLkh({request, response}) {
     try {
       if(request.input('cari') !== null){
@@ -158,6 +179,8 @@ class UserController {
       throw error
     }
   }
+
+
 
   async hapusUser({request, response}){
     const id = request.input('id');

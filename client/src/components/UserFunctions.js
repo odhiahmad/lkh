@@ -29,13 +29,14 @@ export const login = user => {
 
           localStorage.setItem('role', res.data.role)
           localStorage.setItem('idUser',decoded.uid)
-
+          localStorage.setItem('namaUser',res.data.first_name+' '+res.data.last_name+res.data.gelar)
+          localStorage.setItem('jabatan',res.data.jabatan)
           return res.data
         })
       })
       .catch(err => {
         console.log('Invalid username and password, ' + err)
-        return 'Invalid Username and Password'
+        return err
 
       })
   }catch (e) {

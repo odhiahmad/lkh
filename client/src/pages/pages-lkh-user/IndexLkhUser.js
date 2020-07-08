@@ -1,25 +1,15 @@
 import React, {Component} from 'react'
 import {getAllDataLkhDetail, getAllDataLkhDetailPerBulan} from './ApiLkhUser'
 import {Button, Modal} from 'react-bootstrap';
-import Swal from 'sweetalert2'
 import moment from "moment";
 import 'moment/locale/id';
 import {Link} from "react-router-dom";
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
-
+import {PDFDownloadLink} from '@react-pdf/renderer';
+import {PdfDocument} from './PDFLkh'
 moment().locale('id')
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  onOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
-  }
-})
+
 
 class IndexLkhUser extends Component {
   constructor() {
@@ -42,16 +32,6 @@ class IndexLkhUser extends Component {
 
       index: '',
       setShow: false,
-      post: {
-        id: '',
-        status: '',
-        tanggal_pekerjaan: '',
-        first_name: '',
-        last_name: '',
-        email: '',
-        role: '',
-        password: ''
-      },
       modalShow: "modal fade"
     };
   }
@@ -210,7 +190,7 @@ class IndexLkhUser extends Component {
 
   renderTableData() {
     return this.state.data.map((user, index) => {
-      const {first_name, last_name, email, tanggal_pekerjaan, status} = user //destructuring
+      const { tanggal_pekerjaan, status} = user //destructuring
       return (
         <tr key={index}>
           <td>{index + 1}</td>
@@ -218,13 +198,7 @@ class IndexLkhUser extends Component {
           <td>{status === 0 ? <span className="right badge badge-danger">Belum di Verifikasi</span> :
             <span className="right badge badge-success">Telah Diverifikasi</span>}</td>
           <td>
-            <button onClick={() => {
-              this.handleDownloadLaporan(index)
-            }} style={{marginRight: 10}}
-                    className="btn btn-info btn-xs">
-              <i className="fas fa-download" style={{marginRight: 4}}></i>
-              Download LKH
-            </button>
+
             <button onClick={() => {
               this.handleLihatLaporan(index)
             }} style={{marginRight: 10}}
@@ -232,6 +206,16 @@ class IndexLkhUser extends Component {
               <i className="fas fa-eye" style={{marginRight: 4}}></i>
               Lihat LKH
             </button>
+            {/*<PDFDownloadLink*/}
+            {/*  document={<PdfDocument data={tanggal_pekerjaan}/>}*/}
+            {/*  fileName={'LKH'+ '.pdf'}*/}
+            {/*  className="btn btn-success btn-xs"*/}
+            {/*>*/}
+            {/*  <i className="fas fa-print"></i> Print LKH*/}
+            {/*  {({ blob, url, loading, error }) =>*/}
+            {/*    loading ? "Loading document..." : "Download Pdf"*/}
+            {/*  }*/}
+            {/*</PDFDownloadLink>*/}
           </td>
         </tr>
       )
@@ -334,9 +318,7 @@ class IndexLkhUser extends Component {
           >
             <Modal.Header closeButton>
               <Modal.Title>{
-                this.state.tipeForm === 1 ? 'Verifikasi LKH ' + this.state.post.first_name + ' Bulan ' + moment(this.state.post.tanggal_pekerjaan).format("MMMM") + ' ?' :
-                  this.state.tipeForm === 2 ? 'Edit Data ' + this.state.post.first_name :
-                    this.state.tipeForm === 3 ? 'Hapus Data ' + this.state.post.first_name + ' ?' : ''}</Modal.Title>
+                this.state.tipeForm === 1 ? 'LKH DETAIL ': ''}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div>
@@ -357,6 +339,17 @@ class IndexLkhUser extends Component {
               </div>
             </Modal.Body>
             <Modal.Footer>
+              {this.state.dataPerBulan.length !== 0 ?  <PDFDownloadLink
+                document={<PdfDocument data={this.state.dataPerBulan} />}
+                fileName={'LKH.pdf'}
+                className="btn btn-success btn-xs"
+              >
+                <i className="fas fa-print"></i> Print PDF
+                {({ blob, url, loading, error }) =>
+                  loading ? "Loading document..." : "Download Pdf"
+                }
+              </PDFDownloadLink>:<div></div>}
+
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
